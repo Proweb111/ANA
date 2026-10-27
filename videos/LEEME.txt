@@ -1,0 +1,5 @@
+Sube aqui tus VIDEOS (mp4 recomendado).
+El nombre debe ser igual al que escribas en index.html, en la linea de cada recuadro:
+{ tipo:'video', archivo:'video1.mp4', texto:'...' }
+Videos cortos (10-20 s) y de menos de 10 MB. GitHub no acepta archivos de mas de 100 MB.
+Puedes borrar este archivo cuando subas tus videos.
