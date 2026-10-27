@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d9a46c">
+<title>Feliz cumpleaños 🐾</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Indie+Flower&family=Pacifico&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --pink:#ec407a; --dark:#c2185b; --soft:#f8bbd0; --paper:#fff4f7; --ink:#5a3a46;
+    --ease:cubic-bezier(.645,.045,.355,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  body{
+    font-family:'Patrick Hand',cursive;color:var(--ink);
+    display:flex;flex-direction:column;height:100dvh;
+    background:#d9a46c;-webkit-user-select:none;user-select:none;
+  }
+
+  /* ---------- MESA ---------- */
+  #mesa{
+    position:fixed;inset:0;z-index:0;overflow:hidden;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(255,244,230,.30), rgba(70,35,10,.28) 100%),
+      repeating-linear-gradient(0deg, rgba(90,50,20,.38) 0 2px, transparent 2px 150px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 3px, rgba(0,0,0,.035) 3px 6px),
+      linear-gradient(180deg,#e6bd8d,#d3a06a);
+  }
+  .mantelito{
+    position:absolute;left:50%;top:46%;width:min(98vw,1250px);height:min(82vh,820px);
+    transform:translate(-50%,-50%);border-radius:50%;
+    background:radial-gradient(closest-side, rgba(255,232,240,.85), rgba(255,208,224,.45) 70%, rgba(255,208,224,0));
+  }
+  .acc{
+    position:absolute;line-height:1;pointer-events:auto;
+    filter:drop-shadow(2px 5px 3px rgba(60,30,10,.38));
+    transition:transform .3s;
+  }
+  .acc:active{transform:scale(1.15) rotate(8deg)!important}
+
+  /* ---------- ESCENARIO ---------- */
+  main{position:relative;z-index:2;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+  #holder{position:relative;flex:none;touch-action:none}
+  #stage{position:absolute;left:0;top:0;transform-origin:0 0;perspective:2600px}
+
+  .book{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s var(--ease)}
+  .leaf{
+    position:absolute;left:400px;top:0;width:400px;height:560px;
+    transform-origin:left center;transform-style:preserve-3d;
+    transition:transform .9s var(--ease);
+  }
+  .face{
+    position:absolute;left:0;top:0;width:400px;height:560px;overflow:hidden;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    cursor:grab;
+  }
+  .face.back{transform:rotateY(180deg)}
+  .face.right{border-radius:4px 16px 16px 4px;box-shadow:0 12px 28px rgba(70,25,40,.38), inset 8px 0 14px -8px rgba(0,0,0,.2)}
+  .face.left{border-radius:16px 4px 4px 16px;box-shadow:0 12px 28px rgba(70,25,40,.38), inset -8px 0 14px -8px rgba(0,0,0,.2)}
+  .leaf.flipped .face:not(.back){pointer-events:none}
+  .leaf:not(.flipped) .face.back{pointer-events:none}
+
+  /* modo una sola página (celular) */
+  .single .face{transform-origin:left center;transition:transform .85s var(--ease)}
+  .single .face.gone{pointer-events:none}
+
+  /* sombra / brillo de la hoja al girar */
+  .shade{
+    position:absolute;inset:0;z-index:30;pointer-events:none;border-radius:inherit;
+    opacity:var(--sh,0);transition:opacity .9s;
+  }
+  .right .shade{background:
+    linear-gradient(to right, rgba(60,10,30,.55), rgba(60,10,30,0) 55%),
+    linear-gradient(to right, transparent 60%, rgba(255,255,255,.45) 82%, transparent 100%)}
+  .left .shade{background:
+    linear-gradient(to left, rgba(60,10,30,.55), rgba(60,10,30,0) 55%),
+    linear-gradient(to left, transparent 60%, rgba(255,255,255,.45) 82%, transparent 100%)}
+  .dragging .shade{transition:none}
+  .dragging{cursor:grabbing}
+
+  .paper{
+    background-color:var(--paper);
+    background-image:radial-gradient(rgba(236,64,122,.16) 1px, transparent 1.3px);
+    background-size:18px 18px;
+  }
+  .holes{
+    position:absolute;top:0;bottom:0;width:22px;pointer-events:none;
+    background:radial-gradient(circle at 50% 50%, #e8a3b7 0 3.5px, rgba(0,0,0,.14) 4px 5px, transparent 5.5px) 0 0/22px 36px repeat-y;
+  }
+  .right .holes{left:2px}
+  .left .holes{right:2px}
+
+  /* ---------- PEGATINAS ---------- */
+  .stk{
+    position:absolute;pointer-events:none;z-index:6;
+    filter:drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1.5px #fff) drop-shadow(1px 3px 3px rgba(80,20,40,.28));
+  }
+  .emo{line-height:1}
+
+  /* ---------- PORTADA ---------- */
+  .cover{
+    background:
+      radial-gradient(rgba(255,255,255,.28) 1.2px, transparent 1.6px) 0 0/16px 16px,
+      linear-gradient(145deg,#ffb7c8,#f58fb0 55%,#ec6f9c);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    text-align:center;
+  }
+  .cover .stitch{position:absolute;inset:14px;border:2.5px dashed rgba(255,255,255,.8);border-radius:10px;pointer-events:none}
+  .rings{position:absolute;top:0;bottom:0;width:26px;pointer-events:none;
+    background:radial-gradient(circle at 50% 50%, #fff 0 5px, #b0b6bd 5.5px 8px, rgba(0,0,0,.18) 8.5px 10px, transparent 10.5px) 0 0/26px 38px repeat-y}
+  .right .rings{left:6px}
+  .left .rings{right:6px}
+  .c-top{font-family:'Fredoka',sans-serif;font-weight:600;font-size:21px;color:#fff;text-shadow:0 2px 0 rgba(194,24,91,.55);letter-spacing:.5px}
+  .c-box{
+    background:rgba(255,255,255,.9);border:3px dashed var(--dark);border-radius:18px;
+    padding:14px 28px 10px;transform:rotate(-2deg);box-shadow:3px 6px 16px rgba(120,20,60,.25);
+  }
+  .c-24{font-family:'Fredoka',sans-serif;font-weight:700;font-size:58px;line-height:1;color:var(--dark)}
+  .c-name{font-family:'Fredoka',sans-serif;font-weight:700;font-size:60px;line-height:1.1;color:var(--pink);letter-spacing:1px}
+  .c-sub{font-family:'Indie Flower',cursive;font-weight:700;font-size:18px;color:#fff;text-shadow:0 1px 0 rgba(194,24,91,.6)}
+  .c-hint{
+    margin-top:6px;font-family:'Fredoka',sans-serif;font-size:16px;color:var(--dark);
+    background:#fff;padding:7px 18px;border-radius:20px;box-shadow:0 3px 8px rgba(120,20,60,.25);
+    animation:hint 1.8s ease-in-out infinite;
+  }
+  @keyframes hint{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.05)}}
+
+  /* ---------- PÁGINAS DE FOTOS / VIDEOS ---------- */
+  .pg{position:absolute;inset:0;padding:18px 22px 16px}
+  .right .pg{padding-left:38px}
+  .left .pg{padding-right:38px}
+  .pg-title{font-family:'Pacifico',cursive;font-size:21px;color:var(--dark);text-align:center;height:36px;line-height:36px;text-shadow:1px 1px 0 #fff}
+  .entries{display:flex;flex-direction:column;height:calc(100% - 38px);gap:4px}
+  .entry{flex:1;display:flex;align-items:center;gap:14px;min-height:0}
+  .entry.rev{flex-direction:row-reverse}
+  .polaroid{
+    flex:none;position:relative;background:#fff;padding:7px 7px 22px;
+    box-shadow:2px 5px 12px rgba(80,20,40,.28);transform:rotate(var(--rot));
+    transition:transform .25s;
+  }
+  .polaroid.has:active{transform:rotate(0) scale(1.04)}
+  /* El marco mide 132x112 mientras no hay foto; al cargar, JS lo ajusta a la forma real
+     de la foto/video (máx. 150x122) para que se vea COMPLETA, sin recortes. */
+  .ph{position:relative;width:132px;height:112px;background:#ffe3ec;overflow:hidden;transition:width .3s,height .3s}
+  .ph img,.ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;opacity:0;transition:opacity .5s}
+  .ph img.ok,.ph video.ok{opacity:1}
+  .empty{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    border:2px dashed #f48fb1;color:#ad1457;font-size:12px;text-align:center;padding:0 6px;
+  }
+  .empty span{word-break:break-all;line-height:1.2}
+  .empty svg{width:40px;height:40px;color:#fff}
+  .mini-paw{position:absolute;right:8px;bottom:4px;width:16px;height:16px;color:#f48fb1}
+  .vtag{position:absolute;right:8px;bottom:3px;font-size:14px;line-height:1}
+  .tape{
+    position:absolute;top:-10px;left:50%;width:70px;height:22px;transform:translateX(-50%) rotate(-3deg);z-index:4;
+    background:rgba(244,143,177,.65);
+    background-image:repeating-linear-gradient(45deg,transparent 0 5px,rgba(255,255,255,.45) 5px 10px);
+  }
+  .entry:nth-child(2) .tape{transform:translateX(-50%) rotate(4deg);background-color:rgba(255,213,128,.75)}
+  .note{
+    position:relative;flex:1;padding:14px 10px;text-align:center;transform:rotate(var(--nrot));
+    background:rgba(255,255,255,.7);border:2px dashed #f4a6bd;border-radius:12px;
+  }
+  .note b{font-family:'Pacifico',cursive;font-weight:400;font-size:21px;line-height:1.35;color:var(--dark);display:block;overflow-wrap:anywhere}
+
+  /* ---------- CARTA / FIN ---------- */
+  .letter{
+    position:absolute;top:34px;bottom:30px;left:30px;right:30px;padding:6px 6px 0;
+    font-family:'Indie Flower',cursive;font-weight:700;font-size:19px;line-height:30px;color:#6a3a4c;
+    background:repeating-linear-gradient(transparent 0 29px, rgba(236,64,122,.28) 29px 30px);
+  }
+  .right .letter{left:44px}
+  .left .letter{right:44px}
+  .letter h3{font-family:'Pacifico',cursive;font-weight:400;font-size:27px;line-height:40px;color:var(--dark);margin-bottom:0}
+  .letter p{margin-bottom:30px}
+  .fin{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:30px}
+  .fin h2{font-family:'Pacifico',cursive;font-weight:400;font-size:34px;line-height:1.2;color:var(--dark);text-shadow:2px 2px 0 #fff}
+  .fin .big{font-family:'Fredoka',sans-serif;font-weight:700;font-size:44px;color:var(--pink);letter-spacing:4px}
+  .fin button{
+    font-family:'Fredoka',sans-serif;font-size:16px;color:#fff;background:var(--pink);border:0;border-radius:24px;
+    padding:10px 22px;box-shadow:0 4px 10px rgba(194,24,91,.4);cursor:pointer;margin-top:8px;
+  }
+  .backcover{justify-content:center}
+  .backcover .paw-big{width:130px;height:130px;color:rgba(255,255,255,.85)}
+
+  /* ---------- CONTROLES ---------- */
+  .controls{
+    position:relative;z-index:5;flex:none;display:flex;gap:12px;align-items:center;justify-content:center;
+    padding:8px 10px calc(10px + env(safe-area-inset-bottom));
+  }
+  .controls button{
+    font-family:'Fredoka',sans-serif;border:0;color:#fff;background:var(--pink);
+    width:46px;height:46px;border-radius:50%;font-size:26px;line-height:1;cursor:pointer;
+    box-shadow:0 4px 10px rgba(120,30,60,.38);transition:transform .15s, opacity .2s;
+  }
+  .controls button:active{transform:scale(.92)}
+  .controls button:disabled{opacity:.4;cursor:default}
+  #label{
+    font-family:'Fredoka',sans-serif;font-size:15px;background:#fff;color:var(--dark);
+    padding:10px 16px;border-radius:22px;min-width:150px;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.15);
+  }
+
+  /* ---------- VISOR (foto o video en grande) ---------- */
+  #lb{
+    position:fixed;inset:0;z-index:50;background:rgba(40,10,25,.85);display:none;
+    align-items:center;justify-content:center;padding:18px;cursor:zoom-out;
+  }
+  #lb.show{display:flex}
+  #lb img{max-width:100%;max-height:100%;border:10px solid #fff;border-bottom-width:30px;border-radius:3px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  #lb video{display:none;max-width:100%;max-height:100%;border:10px solid #fff;border-radius:3px;box-shadow:0 10px 40px rgba(0,0,0,.5);background:#000;cursor:default}
+</style>
+</head>
+<body>
+
+<!-- Símbolos reutilizables (gatito y huellita) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cat" viewBox="0 0 100 100">
+      <path d="M14 46 L19 8 L46 27 Z" fill="currentColor" stroke="#4a3b40" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M86 46 L81 8 L54 27 Z" fill="currentColor" stroke="#4a3b40" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M23 33 L25 20 L36 27 Z" fill="#f8a5c2"/>
+      <path d="M77 33 L75 20 L64 27 Z" fill="#f8a5c2"/>
+      <ellipse cx="50" cy="58" rx="40" ry="34" fill="currentColor" stroke="#4a3b40" stroke-width="2.5"/>
+      <ellipse cx="35" cy="54" rx="5" ry="6.5" fill="#3a2a30"/>
+      <ellipse cx="65" cy="54" rx="5" ry="6.5" fill="#3a2a30"/>
+      <circle cx="37" cy="51.5" r="1.8" fill="#fff"/>
+      <circle cx="67" cy="51.5" r="1.8" fill="#fff"/>
+      <path d="M46 63 L54 63 L50 68 Z" fill="#f06292"/>
+      <path d="M50 68 Q46 74 41 71 M50 68 Q54 74 59 71" stroke="#3a2a30" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="27" cy="66" rx="6" ry="4" fill="#ff8fab" opacity=".55"/>
+      <ellipse cx="73" cy="66" rx="6" ry="4" fill="#ff8fab" opacity=".55"/>
+      <path d="M16 62 L2 58 M16 68 L3 72 M84 62 L98 58 M84 68 L97 72" stroke="#4a3b40" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="paw" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="68" rx="21" ry="16" fill="currentColor"/>
+      <ellipse cx="21" cy="46" rx="8.5" ry="11.5" fill="currentColor"/>
+      <ellipse cx="40" cy="30" rx="8.5" ry="11.5" fill="currentColor"/>
+      <ellipse cx="60" cy="30" rx="8.5" ry="11.5" fill="currentColor"/>
+      <ellipse cx="79" cy="46" rx="8.5" ry="11.5" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="mesa"></div>
+
+<main id="main">
+  <div id="holder"><div id="stage"></div></div>
+</main>
+
+<nav class="controls" id="controls">
+  <button id="btnPrev" aria-label="Página anterior">‹</button>
+  <span id="label">Portada</span>
+  <button id="btnNext" aria-label="Página siguiente">›</button>
+</nav>
+
+<div id="lb"><img alt=""><video controls playsinline loop></video></div>
+
+<script>
+/* =====================================================
+   ✏️  CONFIGURACIÓN — aquí cambias textos, fotos, videos y música
+   ===================================================== */
+const CONFIG = {
+
+  /* ---------- PORTADA ----------
+     El nombre sale en la portada y en la página final. La edad también. */
+  nombre: 'Ana',
+  edad: 24,
+
+  /* ---------- CARPETAS (dentro del repositorio, junto a index.html) ---------- */
+  carpetaFotos:  'fotos',
+  carpetaVideos: 'videos',
+  carpetaMusica: 'musica',
+
+  /* ---------- MÚSICA ----------
+     Escribe aquí el nombre EXACTO de tus canciones (están en la carpeta "musica").
+     Suenan una tras otra y se repiten en bucle. */
+  canciones: [
+    'cancion.mp3',     // ← CANCIÓN 1: cambia por el nombre de tu archivo
+  ],
+  volumen: 0.6,
+
+  /* ---------- PÁGINAS DE FOTOS Y VIDEOS ----------
+     Cada página lleva hasta 3 recuadros. Cada recuadro es UNA línea:
+
+        { tipo:'foto',  archivo:'NOMBRE.jpg', texto:'Lo que dice al lado' },
+        { tipo:'video', archivo:'NOMBRE.mp4', texto:'Lo que dice al lado' },
+
+       • tipo    → 'foto' (se busca en la carpeta fotos)  o  'video' (carpeta videos)
+       • archivo → el nombre EXACTO del archivo, con su extensión (.jpg .png .webp .mp4 ...)
+                   Ojo: GitHub distingue mayúsculas y minúsculas.  Foto1.JPG ≠ foto1.jpg
+       • texto   → lo que aparece junto a la foto
+
+     Si dejas archivo:'' el recuadro muestra un gatito con "Foto N" (sirve para ir probando).
+     Si un archivo no se encuentra, el recuadro muestra su ruta para que veas qué falta.
+
+     ➕ PARA AGREGAR UNA PÁGINA NUEVA: copia la plantilla de abajo (la que está comentada
+        al final de la lista), pégala justo arriba de ella y borra los // del inicio.
+        Con 30 fotos necesitas 10 páginas. No hay límite de páginas. */
+
+
+paginas: [
+
+    { titulo: 'Mis momentos 🐾',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto1.jpeg',  texto:'* El es el amor de toda mi vida, este pequeño ser, peludo bizco, y amoroso, lo es todo para mí' },
+        { tipo:'foto',  archivo:'foto2.jpeg',  texto:'Mi hijo es el ser más importante para mí, y formará parte siempre de mi, mis recuerdos y todo' },
+        { tipo:'foto',  archivo:'foto3.jpeg',  texto:'Siempre tendrán un lugar en mi corazón' }
+      ] },
+              { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'video',  archivo:'video1.mp4', texto:'Viajar para mí es una experiencia inolvidable y es una de las cosas que más me hacen feliz, es parte de mí.' },
+        { tipo:'video',  archivo:'video2.mp4', texto:'Cada lugar que yo visite, lleva un gran recuerdo bonito para mí.' },
+        { tipo:'video',  archivo:'video11.mp4', texto:'⁠Mi niño gordito bizcochito kiro, te ama mamá.' }
+      ] },
+    { titulo: 'Sonrisas y ronroneos 😻',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto4.jpeg',  texto:'Aveces soy mala expresándomeAveces soy mala expresándome, pero ojalá ellos estén enterados el cariño tan grande que yo les tengo a cada una de esas personas enterados mi vida., ' },
+        { tipo:'foto',  archivo:'foto5.jpeg',  texto:'Ellos son mi familia, una pequeña parte de mi vida que me acompañó en momentos inolvidables' },
+        { tipo:'foto',  archivo:'foto6.jpeg',  texto:'Siempre tendrán un lugar en mi corazón' }
+      ] },
+                 { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'video',  archivo:'video6.mp4', texto:'Mis recuerdos favoritos' },
+        { tipo:'video',  archivo:'video7.mp4', texto:'Gracias por existir' },
+        { tipo:'video',  archivo:'video8.mp4', texto:'¡Te quiero! 💕' }
+      ] },
+
+    { titulo: 'Pura ternura 🧶',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto7.jpeg',  texto:'💕💕💕' },
+        { tipo:'foto',  archivo:'foto8.jpeg',  texto:'Mi Hijo 💕' },
+        { tipo:'foto',  archivo:'foto9.jpeg',  texto:'Crecer, compartir y crear memorias al lado de personas tan especiales es uno de los regalos más bonitos de la vida' }
+      ] },
+
+    { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto10.jpeg', texto:'Agradezco cada abrazo, cada carcajada y cada momento que compartimos juntos; se quedan para siempre en mí.' },
+        { tipo:'foto',  archivo:'foto11.jpeg', texto:'Gracias por existir' },
+        { tipo:'foto',  archivo:'foto12.jpeg', texto:'Cada lugar que yo visite, lleva un gran recuerdo bonito para mí' }
+      ] },
+       { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto13.jpeg', texto:'💕😺💕😺💕' },
+        { tipo:'foto',  archivo:'foto14.jpeg', texto:'💕😺💕' },
+        { tipo:'foto',  archivo:'foto15.jpeg', texto:'💕💕💕' }
+      ] },
+       { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto16.jpeg', texto:'🌟🌟🌟' },
+        { tipo:'foto',  archivo:'foto17.jpeg', texto:'Cada destino que visito se queda grabado en mi alma como una lección y un hermoso recuerdo' },
+        { tipo:'foto',  archivo:'foto18.jpeg', texto:'♥♥♥' }
+      ] },
+       { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto19.jpeg', texto:'Mis recuerdos favoritos' },
+        { tipo:'foto',  archivo:'50.jpeg', texto:'La vida se mide en los lugares que recorremos, las memorias que creamos y la paz que sentimos al viajar' },
+        { tipo:'foto',  archivo:'foto21.jpeg', texto:'📸📸📸' }
+      ] },
+       { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto22.jpeg', texto:'Gracias por existir' },
+        { tipo:'foto',  archivo:'foto23.jpeg', texto:'🫶🫶🫶' },
+        { tipo:'foto',  archivo:'foto24.jpeg', texto:'¡Te quiero! 💕' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto25.jpeg', texto:'¡Te Amo! 💕' },
+        { tipo:'foto',  archivo:'foto26.jpeg', texto:'Cada pequeño paisaje, foto, video es un recuerdo que llevaré en mi corazón siempre' },
+        { tipo:'foto',  archivo:'foto27.jpeg', texto:'¡Mi Hermano! 💕' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto28.jpeg', texto:'🐱' },
+        { tipo:'foto',  archivo:'foto29.jpeg', texto:'✨✨✨' },
+        { tipo:'foto',  archivo:'foto30.jpeg', texto:'Dejar una huellita en cada rincón del mundo y llevarme un bonito recuerdo de cada lugar 💕' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto31.jpeg', texto:'📸📸📸' },
+        { tipo:'foto',  archivo:'foto32.jpeg', texto:'🚗🩷🚗🩷🚗' },
+        { tipo:'foto',  archivo:'foto33.jpeg', texto:'Aveces soy mala expresándome, pero ojalá ellos estén enterados el cariño tan grande que yo les tengo a cada una de esas personas enterados mi vida.' }
+      ] },
+
+               { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'video',  archivo:'video13.mp4', texto:'🌍' },
+        { tipo:'video',  archivo:'video14.mp4', texto:'⌛⌛⌛' },
+        { tipo:'video',  archivo:'video15.mp4', texto:'☀️☀️☀️' }
+      ] },
+
+
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto34.jpeg', texto:'Mis recuerdos favoritos' },
+        { tipo:'foto',  archivo:'foto35.jpeg', texto:'Gracias por existir' },
+        { tipo:'foto',  archivo:'foto36.jpeg', texto:'Dibujito🎨🎨' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto37.jpeg', texto:'🩷🩷🩷' },
+        { tipo:'foto',  archivo:'foto38.jpeg', texto:'🌲💀💜' },
+        { tipo:'foto',  archivo:'foto39.jpeg', texto:'¡Te quiero! 💕' }
+      ] },
+              { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'video',  archivo:'video3.mp4', texto:'💕💕💕' },
+        { tipo:'video',  archivo:'video4.mp4', texto:'🧦🧦🧦' },
+        { tipo:'video',  archivo:'video5.mp4', texto:'La vida se mide en los lugares que recorremos, las memorias que creamos y la paz que sentimos al viajar' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto40.jpeg', texto:'⁠Mi niño gordito bizcochito kiro, te ama mamá' },
+        { tipo:'foto',  archivo:'foto41.jpeg', texto:'Mid Padres 🩷' },
+        { tipo:'foto',  archivo:'foto42.jpeg', texto:'Cada pequeño paisaje, foto, video es un recuerdo que llevaré en mi corazón siempre.' }
+      ] },
+
+                { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'video',  archivo:'video9.mp4', texto:'Top Significa Mucho Para Mi' },
+        { tipo:'video',  archivo:'video10.mp4', texto:'Gracias 💕💕' },
+        { tipo:'video',  archivo:'video12.mp4', texto:'Enserio Te Amo 💕' }
+      ] },
+
+
+
+
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto43.jpeg', texto:'Cada lugar que yo visite, lleva un gran recuerdo bonito para m' },
+        { tipo:'foto',  archivo:'foto44.jpeg', texto:'Viajar para mí es una experiencia inolvidable y es una de las cosas que más me hacen feliz, es parte de mí' },
+        { tipo:'foto',  archivo:'foto45.jpeg', texto:'🗽🗽🗽' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto46.jpeg', texto:'Gracias por existir mi Kiro' },
+        { tipo:'foto',  archivo:'foto47.jpeg', texto:'♥️☕☕♥️' },
+        { tipo:'foto',  archivo:'foto48.jpeg', texto:'♥️♥️' }
+      ] },
+        { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'foto',  archivo:'foto49.jpeg', texto:'🖼️🖼️🖼️' },
+        { tipo:'foto',  archivo:'foto50.jpeg', texto:'🕷️🕸️🔴🕸️🕷️' },
+        { tipo:'foto',  archivo:'foto51.jpeg', texto:'👩‍❤️‍👨👩‍❤️‍👨👩‍❤️‍👨' }
+      ] },
+       
+              { titulo: 'Recuerdos bonitos 🐟',
+      recuadros: [
+        { tipo:'video',  archivo:'video16.mp4', texto:'Te amo Kiro' },
+        { tipo:'video',  archivo:'video17.mp4', texto:'✈️✈️✈️' },
+        { tipo:'video',  archivo:'video18.mp4', texto:'💕😺💕😺💕' }
+      ] },
+ 
+    // ===== PLANTILLA DE PÁGINA NUEVA =====
+    // Copia estas líneas, pégalas arriba de este comentario y borra los // del inicio.
+    // { titulo: 'Título de la página',
+    //   recuadros: [
+    //     { tipo:'foto',  archivo:'',  texto:'' },
+    //     { tipo:'video', archivo:'',  texto:'' },
+    //     { tipo:'foto',  archivo:'',  texto:'' }
+    //   ] },
+
+  ],
+
+  /* ---------- CARTA (penúltima página) ---------- */
+  cartaTitulo: 'Mis Recuerdos:',
+  carta: [
+   'Estos han sido mis recuerdos más bonitos, los momentos que guardo con más cariño en el corazón.', 
+  'Espero seguir llenando mi vida de más viajes, más sonrisas y muchos momentos inolvidables como estos.'
+  ]
+};
+
+/* =====================================================
+   Todo lo de abajo ya funciona solo
+   ===================================================== */
+const $ = s => document.querySelector(s);
+const main = $('#main'), holder = $('#holder'), stage = $('#stage'), mesa = $('#mesa');
+const btnPrev = $('#btnPrev'), btnNext = $('#btnNext'), labelEl = $('#label');
+const lb = $('#lb'), lbImg = $('#lb img'), lbVid = $('#lb video');
+
+let mode = null;     // 'spread' (libro abierto, 2 páginas) | 'single' (1 página, celular)
+let pos = 0;         // spread: 0..4  |  single: 0..7
+let scale = 1, book = null, leaves = [], faces = [], swiped = false;
+let drag = null, busy = false, busyT;
+
+const PLAYLIST = CONFIG.canciones.map(f => CONFIG.carpetaMusica + '/' + encodeURI(f));
+
+// Cada página admite hasta 3 recuadros; si pones más, el resto pasa solo a una página nueva.
+const PAGES = [];
+let _n = 0;
+CONFIG.paginas.forEach(pg => {
+  const it = pg.recuadros || [];
+  for(let i = 0; i < Math.max(it.length, 1); i += 3){
+    PAGES.push({ titulo: pg.titulo || '', items: it.slice(i, i+3), start: _n });
+    _n += it.slice(i, i+3).length;
+  }
+});
+if(!PAGES.length) PAGES.push({ titulo:'', items:[], start:0 });
+
+/* ---------- pegatinas ---------- */
+// Colores de los gatitos (los nombres son solo etiquetas): blancos y rosados.
+const FUR = { orange:'#ffc2d4', gray:'#ffffff', cream:'#fff0f5', white:'#ffffff', pink:'#ff9ebd' };
+const cat = (c,s,css='') => `<svg class="stk" viewBox="0 0 100 100" style="width:${s}px;height:${s}px;color:${FUR[c]};${css}"><use href="#cat"/></svg>`;
+const paw = (c,s,css='') => `<svg class="stk" viewBox="0 0 100 100" style="width:${s}px;height:${s}px;color:${c};${css}"><use href="#paw"/></svg>`;
+const emo = (e,s,css='') => `<span class="stk emo" style="font-size:${s}px;${css}">${e}</span>`;
+
+/* ---------- construcción de caras ---------- */
+function holes(){ return '<i class="holes"></i>'; }
+
+function coverFace(){
+  return `<div class="cover" style="position:absolute;inset:0">
+    <i class="rings"></i><div class="stitch"></div>
+    ${cat('orange',74,'top:34px;right:26px;transform:rotate(10deg)')}
+    ${cat('gray',82,'bottom:40px;left:34px;transform:rotate(-8deg)')}
+    ${cat('cream',60,'bottom:96px;right:30px;transform:rotate(12deg)')}
+    ${paw('#fff',34,'top:44px;left:54px;transform:rotate(-20deg);opacity:.9')}
+    ${paw('#fff',26,'bottom:150px;left:22px;transform:rotate(15deg);opacity:.9')}
+    ${emo('✨',28,'top:120px;right:20px')}
+    ${emo('🐟',34,'bottom:34px;right:120px;transform:rotate(-25deg)')}
+    ${emo('🧶',34,'top:150px;left:44px')}
+    <div class="c-top">🎂 24 Añitos 🎂</div>
+    <div class="c-box"><div class="c-24"> Mis recuerdos</div><div class="c-name">${CONFIG.nombre}</div></div>
+    <div class="c-sub">The Cat-Ologue of Memories</div>
+    <div class="c-hint">Desliza para abrir 🐾</div>
+  </div>`;
+}
+
+function photoPage(p){
+  const pg = PAGES[p];
+  const rots = [-3, 2.5, -2], nrots = [2, -2, 1.5];
+  const mini = [
+    () => cat('cream',34,'top:-16px;right:-6px;transform:rotate(12deg)'),
+    () => emo('🐟',26,'top:-12px;left:-6px;transform:rotate(-20deg)'),
+    () => paw('#f48fb1',26,'top:-10px;right:-4px;transform:rotate(15deg)'),
+    () => emo('💖',24,'top:-12px;left:-4px')
+  ];
+  let rows = '';
+  pg.items.forEach((it, r) => {
+    const n = pg.start + r + 1;                       // número del recuadro en todo el cuaderno
+    const esVideo = it.tipo === 'video';
+    if(it.tipo !== 'foto' && it.tipo !== 'video') console.warn(`Recuadro ${n}: tipo debe ser 'foto' o 'video'`);
+    const dir = esVideo ? CONFIG.carpetaVideos : CONFIG.carpetaFotos;
+    const ruta = it.archivo ? dir + '/' + it.archivo : '';
+    const src = encodeURI(ruta);
+    const media = !ruta ? '' : (esVideo
+      ? `<video data-src="${src}" muted loop playsinline preload="metadata" disablepictureinpicture></video>`
+      : `<img data-src="${src}" alt="Foto ${n}" decoding="async">`);
+    const etiqueta = ruta || `${esVideo ? 'Video' : 'Foto'} ${n}`;
+    rows += `<div class="entry ${r===1?'rev':''}">
+      <div class="polaroid" style="--rot:${rots[r % 3]}deg">
+        <span class="tape"></span>
+        <div class="ph">
+          <div class="empty"><svg viewBox="0 0 100 100"><use href="#cat"/></svg><span>${etiqueta}</span></div>
+          ${media}
+        </div>
+        ${esVideo ? '<span class="vtag">🎬</span>' : '<svg class="mini-paw" viewBox="0 0 100 100"><use href="#paw"/></svg>'}
+      </div>
+      <div class="note" style="--nrot:${nrots[r % 3]}deg"><b>${it.texto || ''}</b>${mini[n % 4]()}</div>
+    </div>`;
+  });
+  const extra = [
+    cat('orange',44,'top:2px;right:14px;transform:rotate(8deg)') + paw('#f48fb1',26,'top:8px;left:44px;transform:rotate(-20deg)'),
+    cat('gray',44,'top:2px;left:44px;transform:rotate(-8deg)')   + emo('✨',24,'top:6px;right:18px'),
+    cat('cream',44,'top:2px;right:14px;transform:rotate(6deg)')  + emo('🧶',26,'top:6px;left:44px'),
+    cat('pink',44,'top:2px;left:44px;transform:rotate(-6deg)')   + paw('#f48fb1',26,'top:8px;right:18px;transform:rotate(18deg)')
+  ][p % 4];
+  return `<div class="pg">${holes()}<div class="pg-title">${pg.titulo}</div><div class="entries">${rows}</div></div>${extra}`;
+}
+
+function letterPage(){
+  const paras = CONFIG.carta.map(t => `<p>${t}</p>`).join('');
+  return `${holes()}<div class="letter"><h3>${CONFIG.cartaTitulo}</h3>${paras}</div>
+    ${cat('orange',58,'bottom:14px;right:16px;transform:rotate(-6deg)')}
+    ${emo('🌸',30,'top:10px;right:20px')}`;
+}
+
+function finPage(){
+  return `${holes()}<div class="fin" style="position:absolute;inset:0">
+    <div style="position:relative;width:240px;height:110px">
+      ${cat('gray',92,'left:0;top:14px;transform:rotate(-8deg)')}
+      ${cat('orange',100,'left:68px;top:0;transform:rotate(3deg);z-index:7')}
+      ${cat('cream',90,'right:0;top:16px;transform:rotate(9deg)')}
+    </div>
+    <h2><br>${CONFIG.nombre}</h2>
+  
+    <button data-act="restart">Volver a empezar ↺</button>
+  </div>`;
+}
+
+function blankPage(){
+  return `${holes()}<div class="fin" style="position:absolute;inset:0">
+    <div style="position:relative;width:200px;height:100px">
+      ${cat('pink',90,'left:0;top:6px;transform:rotate(-8deg)')}
+      ${cat('cream',90,'right:0;top:6px;transform:rotate(8deg)')}
+    </div>
+    <h2>Y lo mejor<br>está por venir ✨</h2>
+  </div>`;
+}
+
+function backCover(){
+  return `<div class="cover backcover" style="position:absolute;inset:0">
+    <i class="rings"></i><div class="stitch"></div>
+    <svg class="paw-big" viewBox="0 0 100 100"><use href="#paw"/></svg>
+    <div class="c-top">Con mucho cariño 💕</div>
+    <div class="c-sub">The Cat-Ologue of Memories</div>
+    ${cat('cream',60,'top:40px;left:50px;transform:rotate(-10deg)')}
+    ${cat('orange',56,'bottom:44px;right:40px;transform:rotate(10deg)')}
+    ${emo('🐟',32,'bottom:60px;left:56px;transform:rotate(-20deg)')}
+  </div>`;
+}
+
+/* orden de las 8 caras */
+// Las páginas de fotos salen de CONFIG.paginas (ver arriba).
+const N_PAGES = PAGES.length;
+const FACES = [() => ({ cls:'cover-face', html: coverFace() })];
+for(let p=0; p<N_PAGES; p++) FACES.push(() => ({ cls:'paper', html: photoPage(p) }));
+if(N_PAGES % 2 === 1) FACES.push(() => ({ cls:'paper', html: blankPage() }));  // relleno para que las hojas cuadren
+FACES.push(() => ({ cls:'paper', html: letterPage() }));
+FACES.push(() => ({ cls:'paper', html: finPage() }));
+FACES.push(() => ({ cls:'cover-face', html: backCover() }));
+const N_FACES = FACES.length;          // portada + páginas + contraportada
+const N_LEAVES = N_FACES / 2;          // hojas del cuaderno
+function faceHTML(i, side, isBack){
+  const f = FACES[i]();
+  return `<div class="face ${side} ${f.cls}${isBack ? ' back' : ''}" data-i="${i}">${f.html}<div class="shade"></div></div>`;
+}
+
+/* ---------- construir libro ---------- */
+function build(){
+  stage.innerHTML = '';
+  leaves = []; faces = [];
+  if(mode === 'spread'){
+    stage.style.width = '800px'; stage.style.height = '560px';
+    let html = '<div class="book" id="book">';
+    for(let k=0; k<N_LEAVES; k++){
+      html += `<div class="leaf" data-k="${k}">${faceHTML(2*k,'right',false)}${faceHTML(2*k+1,'left',true)}</div>`;
+    }
+    html += '</div>';
+    stage.innerHTML = html;
+    book = $('#book');
+    leaves = [...stage.querySelectorAll('.leaf')];
+    leaves.forEach(l => l.style.transition = 'none');
+    book.style.transition = 'none';
+  } else {
+    stage.style.width = '400px'; stage.style.height = '560px';
+    let html = '<div style="position:absolute;inset:0">';
+    for(let i=0; i<N_FACES; i++){ html += faceHTML(i,'right',false); }
+    html += '</div>';
+    stage.innerHTML = html;
+    book = null;
+    faces = [...stage.querySelectorAll('.face')];
+    faces.forEach(f => f.style.transition = 'none');
+  }
+  stage.classList.toggle('single', mode === 'single');
+  stage.querySelectorAll('.ph img, .ph video').forEach(loadMedia);
+  fitNotes();
+  applyState(pos, true);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    leaves.forEach(l => l.style.transition = '');
+    faces.forEach(f => f.style.transition = '');
+    if(book) book.style.transition = '';
+  }));
+}
+
+/* ---------- carga de fotos y videos ---------- */
+const BOX_W = 150, BOX_H = 122;          // tamaño máximo del recuadro de foto
+function fitFrame(ph, w, h){
+  const k = Math.min(BOX_W / w, BOX_H / h);   // se ajusta a la forma real: la foto se ve completa
+  ph.style.width  = Math.round(w * k) + 'px';
+  ph.style.height = Math.round(h * k) + 'px';
+}
+function loadMedia(el){
+  const vid = el.tagName === 'VIDEO';
+  const ph = el.closest('.ph'), emp = ph.querySelector('.empty');
+  const ok = () => {
+    const w = vid ? el.videoWidth : el.naturalWidth, h = vid ? el.videoHeight : el.naturalHeight;
+    if(w && h) fitFrame(ph, w, h);
+    el.classList.add('ok');
+    if(emp) emp.style.display = 'none';
+    const pol = el.closest('.polaroid'); if(pol) pol.classList.add('has');
+    if(vid) updateVideos();
+  };
+  const fail = () => { el.remove(); if(emp) emp.firstElementChild.nextElementSibling.textContent = 'No se encontró: ' + decodeURI(el.dataset.src); };
+  if(vid){
+    el.muted = true;
+    el.addEventListener('loadedmetadata', ok);
+    el.addEventListener('error', fail);
+  } else {
+    el.onload = ok; el.onerror = fail;
+  }
+  el.src = el.dataset.src + (vid ? '#t=0.1' : '');
+}
+
+/* ---------- el texto de cada nota se achica solo si es largo ---------- */
+// Primero prueba la letra decorativa (Pacifico) de 21px a 15px.
+// Si aún no cabe, pasa a una letra más angosta (Patrick Hand) y sigue bajando hasta 10px.
+const FIT_STEPS = [['Pacifico', 21, 15], ['Patrick Hand', 24, 10]];
+function fitNotes(){
+  stage.querySelectorAll('.note').forEach(note => {
+    const b = note.firstElementChild;
+    const entry = note.parentElement;
+    const avail = entry.clientHeight - 12 - 32;       // alto de la fila, menos margen y relleno de la nota
+    if(avail <= 0) return;
+    for(const [fam, from, to] of FIT_STEPS){
+      for(let sz = from; sz >= to; sz--){
+        b.style.fontFamily = `'${fam}', cursive`;
+        b.style.fontSize = sz + 'px';
+        b.style.lineHeight = sz > 17 ? '1.35' : '1.25';
+        if(b.offsetHeight <= avail) return;
+      }
+    }
+  });
+}
+if(document.fonts && document.fonts.load){
+  Promise.all([document.fonts.load("21px Pacifico"), document.fonts.load("20px 'Patrick Hand'")])
+    .then(() => fitNotes()).catch(() => {});
+  document.fonts.ready.then(() => fitNotes());
+}
+
+/* ---------- videos: solo se reproducen los de las páginas visibles ---------- */
+function visibleFaces(){
+  if(mode === 'spread'){
+    if(pos === 0) return [0];
+    if(pos === N_LEAVES) return [N_FACES - 1];
+    return [2*pos-1, 2*pos];
+  }
+  return [pos];
+}
+function updateVideos(){
+  if(lb.classList.contains('show')) return;
+  const vis = new Set(visibleFaces());
+  stage.querySelectorAll('video').forEach(v => {
+    const f = v.closest('.face');
+    const i = f ? +f.dataset.i : -1;
+    if(vis.has(i)){ const p = v.play(); if(p && p.catch) p.catch(() => {}); }
+    else v.pause();
+  });
+}
+
+/* ---------- estado / animación ---------- */
+function applyState(prev, instant, extra){
+  if(extra === undefined) extra = -1;
+  if(!instant){
+    busy = true; clearTimeout(busyT);
+    busyT = setTimeout(() => { busy = false; }, 950);
+  }
+  if(mode === 'spread'){
+    const lo = Math.min(prev,pos), hi = Math.max(prev,pos);
+    leaves.forEach((lf,k) => {
+      const flipped = k < pos;
+      const finalZ = flipped ? k+1 : N_LEAVES-k;
+      clearTimeout(lf._t);
+      if(!instant && ((k >= lo && k < hi) || k === extra)){
+        lf.style.zIndex = 100;
+        lf._t = setTimeout(() => { lf.style.zIndex = finalZ; }, 920);
+      } else {
+        lf.style.zIndex = finalZ;
+      }
+      lf.style.transform = flipped ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+      lf.classList.toggle('flipped', flipped);
+    });
+    book.style.transform = pos === 0 ? 'translateX(-200px)' : (pos === N_LEAVES ? 'translateX(200px)' : 'translateX(0)');
+  } else {
+    faces.forEach((f,i) => {
+      const gone = i < pos;
+      f.style.zIndex = N_FACES - i;
+      f.style.transform = gone ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+      f.classList.toggle('gone', gone);
+    });
+  }
+  updateUI();
+  updateVideos();
+}
+
+function updateUI(){
+  const max = mode === 'spread' ? N_LEAVES : N_FACES - 1;
+  btnPrev.disabled = pos <= 0;
+  btnNext.disabled = pos >= max;
+  let t;
+  if(mode === 'spread') t = pos === 0 ? 'Portada' : (pos === N_LEAVES ? 'Contraportada' : `Páginas ${2*pos-1} – ${2*pos}`);
+  else t = pos === 0 ? 'Portada' : (pos === N_FACES - 1 ? 'Contraportada' : `Página ${pos} de ${N_FACES - 2}`);
+  labelEl.textContent = t;
+}
+
+function turn(d){
+  const max = mode === 'spread' ? N_LEAVES : N_FACES - 1;
+  const np = pos + d;
+  if(np < 0 || np > max) return;
+  const prev = pos; pos = np;
+  applyState(prev, false);
+}
+
+function restart(){
+  const t = setInterval(() => { if(pos > 0) turn(-1); else clearInterval(t); }, 360);
+}
+
+/* ---------- tamaño / modo ---------- */
+function measure(){ return { aw: main.clientWidth - 12, ah: main.clientHeight - 8 }; }
+function decideMode(){
+  const { aw, ah } = measure();
+  const sSpread = Math.min(aw/820, ah/580);
+  return (aw >= 700 && sSpread >= 0.6) ? 'spread' : 'single';
+}
+function fit(){
+  const { aw, ah } = measure();
+  const W = mode === 'spread' ? 800 : 400;
+  scale = Math.min(aw/(W+20), ah/580, 1.4);
+  holder.style.width = (W*scale) + 'px';
+  holder.style.height = (560*scale) + 'px';
+  stage.style.transform = `scale(${scale})`;
+}
+function setMode(m){
+  if(mode === m) return;
+  if(mode === 'spread' && m === 'single') pos = pos === 0 ? 0 : 2*pos - 1;
+  else if(mode === 'single' && m === 'spread') pos = (pos + 1) >> 1;
+  mode = m;
+  build();
+}
+
+/* ---------- mesa con accesorios ---------- */
+function buildMesa(){
+  const portrait = innerHeight > innerWidth;
+  const A = portrait ? [
+    ['💄',6,2,46,-20], ['🪞',23,1,44,-10], ['🎀',43,2,40,8], ['🌷',76,1,54,12],
+    ['👛',6,79,52,-12], ['💍',36,84,34,0], ['🕶️',60,80,50,8], ['🧴',82,77,46,10]
+  ] : [
+    ['💄',3,10,52,-20], ['🪞',4,38,60,-8], ['👛',3,70,56,10], ['🍓',22,4,40,20],
+    ['🌷',92,8,56,14], ['🕶️',91,38,54,-6], ['🧴',92,68,54,8], ['☕',82,86,52,-10], ['💍',14,88,36,0]
+  ];
+  mesa.innerHTML = '<div class="mantelito"></div>' +
+    A.map(([e,x,y,s,r]) => `<span class="acc" style="left:${x}%;top:${y}%;font-size:${s}px;transform:rotate(${r}deg)">${e}</span>`).join('');
+}
+
+/* ---------- visor grande (foto o video) ---------- */
+let lbPausedMusic = false;
+function openLb(el){
+  if(el.tagName === 'VIDEO'){
+    lbImg.style.display = 'none';
+    lbVid.style.display = 'block';
+    lbVid.src = (el.currentSrc || el.src).split('#')[0];
+    lbVid.muted = false;
+    lbPausedMusic = !audio.paused;
+    if(lbPausedMusic) audio.pause();
+    stage.querySelectorAll('video').forEach(v => v.pause());
+    lb.classList.add('show');
+    const p = lbVid.play(); if(p && p.catch) p.catch(() => {});
+  } else {
+    lbVid.style.display = 'none';
+    lbImg.style.display = 'block';
+    lbImg.src = el.src;
+    lb.classList.add('show');
+  }
+}
+function closeLb(){
+  lb.classList.remove('show');
+  lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load();
+  if(lbPausedMusic){ audio.play().catch(() => {}); lbPausedMusic = false; }
+  updateVideos();
+}
+lb.addEventListener('click', closeLb);
+lbVid.addEventListener('click', e => e.stopPropagation());
+
+/* ---------- toques (clic) ---------- */
+stage.addEventListener('click', e => {
+  if(swiped) return;
+  const act = e.target.closest('[data-act]');
+  if(act && act.dataset.act === 'restart'){ restart(); return; }
+  const pol = e.target.closest('.polaroid.has');
+  if(pol){
+    const m = pol.querySelector('img.ok, video.ok');
+    if(m) openLb(m);
+    return;
+  }
+  const face = e.target.closest('.face');
+  if(!face) return;
+  if(mode === 'spread'){
+    turn(face.classList.contains('back') ? -1 : 1);
+  } else {
+    const r = face.getBoundingClientRect();
+    const frac = (e.clientX - r.left) / r.width;
+    turn((frac < 0.28 || pos === N_FACES - 1) ? -1 : 1);
+  }
+});
+
+/* ---------- arrastrar la hoja con el dedo (o el mouse) ---------- */
+function spineX(){
+  const r = stage.getBoundingClientRect();
+  const off = pos === 0 ? -200 : (pos === N_LEAVES ? 200 : 0);
+  return r.left + (400 + off) * scale;
+}
+
+function startDrag(dx, x0){
+  if(mode === 'spread'){
+    const sx = spineX();
+    if(dx < 0 && x0 >= sx && pos < N_LEAVES){ drag.dir = 1;  drag.k = pos;     drag.el = leaves[pos]; }
+    else if(dx > 0 && x0 < sx && pos > 0){ drag.dir = -1; drag.k = pos - 1; drag.el = leaves[pos-1]; }
+    else return false;
+  } else {
+    if(dx < 0 && pos < N_FACES - 1){ drag.dir = 1;  drag.k = pos;     drag.el = faces[pos]; }
+    else if(dx > 0 && pos > 0){ drag.dir = -1; drag.k = pos - 1; drag.el = faces[pos-1]; }
+    else return false;
+  }
+  drag.el.style.transition = 'none';
+  drag.el.classList.add('dragging');
+  if(book && (drag.k === 0 || drag.k === N_LEAVES - 1)) book.style.transition = 'none';
+  return true;
+}
+
+function moveDrag(e){
+  const w = 400 * scale;
+  const dx = e.clientX - drag.x0;
+  let c;
+  if(mode === 'spread') c = drag.dir === 1 ? 1 + dx / w : -1 + dx / w;
+  else c = drag.dir === 1 ? 1 + dx / w : dx / (w * 0.9);
+  c = Math.max(-1, Math.min(1, c));
+  if(mode === 'single' && drag.dir === -1) c = Math.max(0, c);
+  drag.c = c;
+  const ang = Math.acos(c);                       // 0 .. π  (hoja cerrada → hoja volteada)
+  const el = drag.el;
+  el.style.zIndex = 100;
+  el.style.transform = `rotateY(${(-ang * 180 / Math.PI).toFixed(2)}deg)`;
+  el.style.setProperty('--sh', (Math.sin(ang) * 0.7).toFixed(3));
+  if(book){
+    const t = ang / Math.PI;
+    if(drag.k === 0) book.style.transform = `translateX(${(-200 * (1 - t)).toFixed(1)}px)`;
+    else if(drag.k === N_LEAVES - 1) book.style.transform = `translateX(${(200 * t).toFixed(1)}px)`;
+  }
+  const now = performance.now(), dt = now - drag.lastT;
+  if(dt > 0){
+    drag.v = 0.6 * drag.v + 0.4 * ((e.clientX - drag.lastX) / dt);
+    drag.lastX = e.clientX; drag.lastT = now;
+  }
+}
+
+function finishDrag(d){
+  const el = d.el, forward = d.dir === 1;
+  let complete;
+  if(mode === 'spread'){
+    complete = forward ? (d.v < -0.5 || (d.c < 0.45 && d.v < 0.3))
+                       : (d.v > 0.5  || (d.c > -0.45 && d.v > -0.3));
+  } else {
+    complete = forward ? (d.v < -0.5 || (d.c < 0.5 && d.v < 0.3))
+                       : (d.v > 0.5  || (d.c > 0.35 && d.v > -0.3));
+  }
+  el.classList.remove('dragging');
+  el.style.transition = '';
+  if(book) book.style.transition = '';
+  void el.offsetWidth;                          // aplica el estado actual antes de animar
+  const prev = pos;
+  if(mode === 'spread') pos = forward ? (complete ? d.k + 1 : d.k) : (complete ? d.k : d.k + 1);
+  else pos = forward ? (complete ? pos + 1 : pos) : (complete ? pos - 1 : pos);
+  el.style.setProperty('--sh', 0);
+  swiped = true; setTimeout(() => { swiped = false; }, 350);
+  applyState(prev, false, mode === 'spread' ? d.k : -1);
+}
+
+holder.addEventListener('pointerdown', e => {
+  if(busy || drag || (e.pointerType === 'mouse' && e.button !== 0)) return;
+  if(lb.classList.contains('show')) return;
+  drag = { id:e.pointerId, x0:e.clientX, y0:e.clientY, lastX:e.clientX, lastT:performance.now(), v:0, c:1, active:false, dir:0, k:0, el:null };
+});
+holder.addEventListener('pointermove', e => {
+  if(!drag || e.pointerId !== drag.id) return;
+  if(!drag.active){
+    const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    if(Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy)) return;
+    if(!startDrag(dx, drag.x0)){ drag = null; return; }
+    drag.active = true;
+    try{ holder.setPointerCapture(e.pointerId); }catch(_){}
+  }
+  moveDrag(e);
+});
+function endDrag(e){
+  if(!drag || e.pointerId !== drag.id) return;
+  const d = drag; drag = null;
+  if(!d.active) return;
+  if(performance.now() - d.lastT > 80) d.v = 0;
+  finishDrag(d);
+}
+holder.addEventListener('pointerup', endDrag);
+holder.addEventListener('pointercancel', endDrag);
+
+btnNext.addEventListener('click', () => turn(1));
+btnPrev.addEventListener('click', () => turn(-1));
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight') turn(1);
+  if(e.key === 'ArrowLeft') turn(-1);
+  if(e.key === 'Escape') closeLb();
+});
+
+let rT;
+function onResize(){
+  clearTimeout(rT);
+  rT = setTimeout(() => { buildMesa(); setMode(decideMode()); fit(); }, 120);
+}
+addEventListener('resize', onResize);
+addEventListener('orientationchange', onResize);
+
+/* ---------- música: 2 canciones en bucle, suena sola ---------- */
+const audio = new Audio();
+audio.preload = 'auto'; audio.volume = CONFIG.volumen;
+let track = 0, started = false, fails = 0;
+const GESTOS = ['pointerup','touchend','click','keydown'];
+
+function loadTrack(i){ track = i % PLAYLIST.length; audio.src = PLAYLIST[track]; }
+function tryStart(){
+  if(started || !PLAYLIST.length) return;
+  if(!audio.src) loadTrack(0);
+  const p = audio.play();
+  if(p && p.then){
+    p.then(() => {
+      started = true;
+      GESTOS.forEach(g => document.removeEventListener(g, tryStart, true));
+    }).catch(() => {});
+  }
+}
+audio.addEventListener('ended', () => { loadTrack(track + 1); audio.play().catch(() => {}); });
+audio.addEventListener('playing', () => { fails = 0; });
+audio.addEventListener('error', () => {
+  fails++;
+  if(fails >= PLAYLIST.length) return;
+  loadTrack(track + 1); audio.play().catch(() => {});
+});
+// Intenta sonar apenas carga la página. Si el navegador lo bloquea (pasa en
+// celulares), arranca con el primer toque en cualquier parte.
+GESTOS.forEach(g => document.addEventListener(g, tryStart, true));
+tryStart();
+
+/* ---------- inicio ---------- */
+document.title = `Collage  ${CONFIG.nombre} 🐾 ${CONFIG.edad} años`;
+buildMesa();
+mode = decideMode();
+build();
+fit();
+</script>
+</body>
+</html>

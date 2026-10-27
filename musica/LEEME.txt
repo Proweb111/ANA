@@ -1,0 +1,3 @@
+Sube aqui tus 2 CANCIONES (mp3).
+Los nombres deben ser iguales a los de la lista "canciones" en index.html.
+Puedes borrar este archivo cuando subas tus canciones.
